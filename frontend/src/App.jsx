@@ -29,6 +29,7 @@ const NON_POST_VIEWS = ["compose", "admin", "analytics", "settings"];
 function Dashboard() {
   const { user, logout, loginWithLinkedIn } = useAuth();
   const [active, setActive] = useState("compose");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [linkedinStatus, setLinkedinStatus] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -86,12 +87,15 @@ function Dashboard() {
         isAdmin={user.role === "admin"}
         userEmail={user.email}
         onLogout={logout}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <StatusBar
           status={linkedinStatus}
           onConnect={handleConnect}
           viewLabel={VIEW_LABELS[active]}
+          onMenuClick={() => setSidebarOpen(true)}
         />
         <main className="flex-1 overflow-y-auto">
           {active === "compose" ? (

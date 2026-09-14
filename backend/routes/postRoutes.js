@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const crypto = require("crypto");
 const router = express.Router();
 
 const Post = require("../models/Post");
@@ -9,9 +10,34 @@ const linkedinService = require("../services/linkedinService");
 const githubService = require("../services/githubService");
 const { authenticate } = require("../middleware/auth");
 
+// Only real images and MP4 video are accepted — anything else is rejected
+// before it touches disk. Files are also renamed to a random name with a
+// safe, whitelisted extension (never the client-supplied filename), so a
+// disguised upload (e.g. an .html or .svg file with a script payload)
+// can't be served back as executable/renderable content later.
+const ALLOWED_MIME_EXT = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/gif": ".gif",
+  "image/webp": ".webp",
+  "video/mp4": ".mp4",
+};
+
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, "../uploads"),
+  filename: (req, file, cb) => {
+    const ext = ALLOWED_MIME_EXT[file.mimetype] || "";
+    cb(null, `${crypto.randomBytes(16).toString("hex")}${ext}`);
+  },
+});
+
 const upload = multer({
-  dest: path.join(__dirname, "../uploads"),
+  storage,
   limits: { fileSize: 200 * 1024 * 1024 }, // 200MB — LinkedIn itself allows up to 500MB
+  fileFilter: (req, file, cb) => {
+    if (ALLOWED_MIME_EXT[file.mimetype]) cb(null, true);
+    else cb(new Error("Unsupported file type — only JPEG/PNG/GIF/WebP images and MP4 video are allowed"));
+  },
 });
 
 const uploadFields = upload.fields([
@@ -70,7 +96,12 @@ router.post("/generate", uploadFields, async (req, res) => {
     res.json(post);
   } catch (err) {
     console.error(err.response?.data || err.message);
-    res.status(500).json({ error: err.message?.includes("File too large") ? "Video is too large (200MB limit)" : "Failed to generate post" });
+    const message = err.message?.includes("File too large")
+      ? "Video is too large (200MB limit)"
+      : err.message?.includes("Unsupported file type")
+      ? err.message
+      : "Failed to generate post";
+    res.status(err.message?.includes("Unsupported file type") ? 400 : 500).json({ error: message });
   }
 });
 

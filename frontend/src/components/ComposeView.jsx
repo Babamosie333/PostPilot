@@ -92,7 +92,7 @@ export default function ComposeView({ onGenerated }) {
   const hasContent = files.length > 0 || video || context || topic || linkUrl;
 
   return (
-    <div className="mx-auto max-w-2xl px-8 py-10">
+    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-8 sm:py-10">
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
