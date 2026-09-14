@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-ink: #0f1512;
+  --color-panel: #161f1a;
+  --color-panel-raised: #1c261f;
+  --color-line: #2b362f;
+  --color-line-bright: #3a473e;
+  --color-paper: #ece8de;
+  --color-paper-dim: #9aa69c;
+  --color-amber: #f2a93b;
+  --color-amber-dim: #a8752c;
+  --color-signal-green: #6fa98a;
+  --color-signal-rust: #c1573f;
+  --color-signal-blue: #6f92a9;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--color-amber);
+  color: var(--color-ink);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+}
