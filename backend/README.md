@@ -1,5 +1,5 @@
 # PostPilot Backend
-
+## Vikram Singh
 Multi-user, AI-powered LinkedIn auto-posting tool. Node.js + Express + MongoDB + Groq AI + LinkedIn Posts API. Each user signs up, connects their own LinkedIn account, and only ever sees their own posts.
 
 ## Setup
