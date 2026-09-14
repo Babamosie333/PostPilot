@@ -6,6 +6,7 @@ import PostsView from "./components/PostsView";
 import AdminView from "./components/AdminView";
 import AnalyticsView from "./components/AnalyticsView";
 import SettingsView from "./components/SettingsView";
+import AboutView from "./components/AboutView";
 import AuthScreen from "./components/AuthScreen";
 import BannedScreen from "./components/BannedScreen";
 import { api } from "./lib/api";
@@ -20,11 +21,12 @@ const VIEW_LABELS = {
   failed: "Failed",
   analytics: "Analytics",
   settings: "Settings",
+  about: "About",
   admin: "Admin — users",
 };
 
 // Views that don't back onto a filtered post list.
-const NON_POST_VIEWS = ["compose", "admin", "analytics", "settings"];
+const NON_POST_VIEWS = ["compose", "admin", "analytics", "settings", "about"];
 
 function Dashboard() {
   const { user, logout, loginWithLinkedIn } = useAuth();
@@ -98,30 +100,34 @@ function Dashboard() {
           onMenuClick={() => setSidebarOpen(true)}
         />
         <main className="flex-1 overflow-y-auto">
-          {active === "compose" ? (
-            <ComposeView
-              onGenerated={() => {
-                counts.refresh();
-              }}
-            />
-          ) : active === "admin" ? (
-            <AdminView />
-          ) : active === "analytics" ? (
-            <AnalyticsView />
-          ) : active === "settings" ? (
-            <SettingsView />
-          ) : (
-            <PostsView
-              status={active}
-              posts={posts}
-              loading={loading}
-              error={error}
-              onChange={(updated, removedId) => {
-                handlePostChange(updated, removedId);
-                counts.refresh();
-              }}
-            />
-          )}
+          <div key={active} className="animate-fade-in">
+            {active === "compose" ? (
+              <ComposeView
+                onGenerated={() => {
+                  counts.refresh();
+                }}
+              />
+            ) : active === "admin" ? (
+              <AdminView />
+            ) : active === "analytics" ? (
+              <AnalyticsView />
+            ) : active === "settings" ? (
+              <SettingsView />
+            ) : active === "about" ? (
+              <AboutView />
+            ) : (
+              <PostsView
+                status={active}
+                posts={posts}
+                loading={loading}
+                error={error}
+                onChange={(updated, removedId) => {
+                  handlePostChange(updated, removedId);
+                  counts.refresh();
+                }}
+              />
+            )}
+          </div>
         </main>
       </div>
     </div>

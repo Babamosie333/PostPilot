@@ -103,7 +103,7 @@ export default function ComposeView({ onGenerated }) {
           if (dropped.length) addFiles(dropped);
         }}
         onClick={() => fileInputRef.current?.click()}
-        className="focus-ring flex min-h-40 cursor-pointer flex-col items-center justify-center gap-2 border border-dashed border-line-bright bg-panel p-4 transition-colors hover:border-amber-dim"
+        className="focus-ring flex min-h-40 cursor-pointer flex-col items-center justify-center gap-2 border border-dashed border-line-bright bg-panel p-4 transition-all hover:border-amber-dim hover:bg-panel-raised"
       >
         {previews.length > 0 ? (
           <div className="flex w-full flex-wrap gap-2">
@@ -308,7 +308,7 @@ export default function ComposeView({ onGenerated }) {
         <button
           onClick={handleGenerate}
           disabled={busy}
-          className="focus-ring border border-amber bg-amber px-5 py-2.5 text-[13px] font-700 text-ink transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="focus-ring border border-amber bg-amber px-5 py-2.5 text-[13px] font-700 text-ink transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:active:scale-100"
         >
           {busy ? (video ? "Uploading video…" : "Generating…") : "Generate post"}
         </button>
