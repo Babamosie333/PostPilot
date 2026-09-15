@@ -262,7 +262,7 @@ router.post("/github-recap", async (req, res) => {
     if (!req.user.github?.username) {
       return res.status(400).json({ error: "Connect a GitHub username first, in Settings" });
     }
-    const post = await githubService.generateRecapForUser(req.user);
+    const post = await githubService.generateRecapForUser(req.user, { forceFullWeek: true });
     if (!post) {
       return res.json({ created: false, message: "No new commits found since your last recap" });
     }

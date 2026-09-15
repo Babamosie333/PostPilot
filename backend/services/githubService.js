@@ -42,10 +42,14 @@ async function fetchCommitSummary(username, token, sinceDate) {
 // Generates (and saves as a draft) a weekly recap post for one user, based
 // on their GitHub activity since their last recap. Returns the created
 // Post, or null if there was nothing new to summarize.
-async function generateRecapForUser(user) {
+// forceFullWeek: ignores lastRecapAt and always looks back a full 7 days —
+// used by the manual "test" trigger so repeated testing isn't limited to
+// "since the last successful run" (which is what the real Sunday cron uses).
+async function generateRecapForUser(user, { forceFullWeek = false } = {}) {
   if (!user.github?.username) return null;
 
-  const since = user.github.lastRecapAt || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const since = forceFullWeek ? sevenDaysAgo : user.github.lastRecapAt || sevenDaysAgo;
   const commitSummary = await fetchCommitSummary(user.github.username, user.github.token, since);
 
   if (!commitSummary) return null;
