@@ -47,7 +47,7 @@ export default function AdminView() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-8 py-8">
+    <div className="mx-auto max-w-3xl px-4 py-6 sm:px-8 sm:py-8">
       {loading && <p className="font-mono text-[12px] text-paper-dim">loading…</p>}
       {error && (
         <p className="mb-4 border border-signal-rust/40 bg-signal-rust/10 px-3 py-2 font-mono text-[12px] text-signal-rust">
@@ -111,7 +111,7 @@ export default function AdminView() {
                 />
                 <button
                   onClick={() => confirmBan(u.id)}
-                  className="focus-ring bg-signal-rust px-3 py-1.5 text-[12px] font-700 text-ink"
+                  className="focus-ring bg-signal-rust px-3 py-1.5 text-[12px] font-700 text-white"
                 >
                   Confirm ban
                 </button>

@@ -273,4 +273,42 @@ router.post("/github-recap", async (req, res) => {
   }
 });
 
+// 7. AI Assistant — freeform chat reply, does NOT save anything.
+// The frontend keeps its own short conversation history and sends it along
+// so follow-up messages have context.
+router.post("/ai-chat", async (req, res) => {
+  try {
+    const { message, history = [], tone = "authentic" } = req.body;
+    if (!message?.trim()) return res.status(400).json({ error: "Message required" });
+
+    const reply = await aiService.generateAssistantReply({ message, history, tone });
+    res.json({ reply });
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to get a reply" });
+  }
+});
+
+// 8. Explicitly save an AI Assistant reply as a draft — only happens when
+// the user clicks "Save as draft", never automatically.
+router.post("/save-as-draft", async (req, res) => {
+  try {
+    const { text, tone = "authentic" } = req.body;
+    if (!text?.trim()) return res.status(400).json({ error: "Text required" });
+
+    const post = await Post.create({
+      userId: req.user._id,
+      generatedText: text,
+      tone,
+      mode: "manual",
+      source: "manual",
+      status: "draft",
+    });
+    res.json(post);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: "Failed to save draft" });
+  }
+});
+
 module.exports = router;

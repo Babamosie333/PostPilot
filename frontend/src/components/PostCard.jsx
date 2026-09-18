@@ -143,7 +143,7 @@ export default function PostCard({ post, onChange }) {
   const hasStats = typeof post.likes === "number";
 
   return (
-    <div className="border border-line bg-panel">
+    <div className="border border-line bg-panel transition-shadow duration-150 hover:shadow-[0_2px_16px_rgba(0,0,0,0.25)]">
       <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
         <div className="flex items-center gap-2">
           <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
@@ -247,7 +247,7 @@ export default function PostCard({ post, onChange }) {
               <button
                 onClick={saveStats}
                 disabled={busy}
-                className="focus-ring bg-amber px-3 py-1 text-[11.5px] font-700 text-ink disabled:opacity-50"
+                className="focus-ring bg-amber px-3 py-1 text-[11.5px] font-700 text-white disabled:opacity-50"
               >
                 Save
               </button>
@@ -318,7 +318,7 @@ export default function PostCard({ post, onChange }) {
           <button
             onClick={confirmSchedule}
             disabled={!when || busy}
-            className="focus-ring bg-amber px-3 py-1.5 text-[12px] font-700 text-ink disabled:opacity-50"
+            className="focus-ring bg-amber px-3 py-1.5 text-[12px] font-700 text-white disabled:opacity-50"
           >
             Confirm
           </button>
@@ -411,9 +411,9 @@ export default function PostCard({ post, onChange }) {
 
 function ActionButton({ children, onClick, disabled, primary, danger }) {
   const base =
-    "focus-ring px-3 py-1.5 text-[11.5px] font-600 transition-colors disabled:opacity-40";
+    "focus-ring px-3 py-1.5 text-[11.5px] font-600 transition-all active:scale-95 disabled:opacity-40 disabled:active:scale-100";
   const style = primary
-    ? "bg-amber text-ink hover:opacity-90"
+    ? "bg-amber text-white hover:opacity-90"
     : danger
     ? "border border-line text-signal-rust hover:border-signal-rust/50"
     : "border border-line text-paper-dim hover:text-paper hover:border-line-bright";

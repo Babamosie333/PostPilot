@@ -4,33 +4,133 @@
   --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
-  --color-ink: #0f1512;
-  --color-panel: #161f1a;
-  --color-panel-raised: #1c261f;
-  --color-line: #2b362f;
-  --color-line-bright: #3a473e;
-  --color-paper: #ece8de;
-  --color-paper-dim: #9aa69c;
-  --color-amber: #f2a93b;
-  --color-amber-dim: #a8752c;
-  --color-signal-green: #6fa98a;
-  --color-signal-rust: #c1573f;
-  --color-signal-blue: #6f92a9;
+  /* Dark theme (default) — deep navy/indigo, matches the "control tower at night" concept */
+  --color-ink: #05060f;
+  --color-panel: #0d1128;
+  --color-panel-raised: #141a3d;
+  --color-line: #262c52;
+  --color-line-bright: #3a4270;
+  --color-paper: #eef0fa;
+  --color-paper-dim: #8a90b8;
+  --color-amber: #7c6cf2;
+  --color-amber-dim: #5b4bc4;
+  --color-signal-green: #34d399;
+  --color-signal-rust: #f87171;
+  --color-signal-blue: #60a5fa;
+}
+
+/* Light theme override — clean white/lavender, swapped in via a `light` class on <html> */
+html.light {
+  --color-ink: #f5f5fc;
+  --color-panel: #ffffff;
+  --color-panel-raised: #f7f7fe;
+  --color-line: #e5e5f3;
+  --color-line-bright: #d3d3ec;
+  --color-paper: #1c1c2e;
+  --color-paper-dim: #6b6b85;
+  --color-amber: #6a5cf5;
+  --color-amber-dim: #8577f7;
+  --color-signal-green: #16a34a;
+  --color-signal-rust: #dc2626;
+  --color-signal-blue: #2563eb;
 }
 
 html, body, #root {
   height: 100%;
 }
 
+#root {
+  position: relative;
+  z-index: 1;
+}
+
 body {
   background-color: var(--color-ink);
   color: var(--color-paper);
   font-family: var(--font-display);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  position: relative;
+}
+
+/* Animated background — three soft blurred blobs drifting slowly behind
+   the app. Colors and opacity are tuned per-theme via the .light override
+   below, so it reads as a moody glow in dark mode and a soft wash in light
+   mode without ever competing with foreground content. */
+.app-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.app-bg::before,
+.app-bg::after,
+.app-bg .app-bg-blob {
+  content: "";
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.35;
+  will-change: transform;
+}
+
+.app-bg::before {
+  background: radial-gradient(circle, #4f7cff, transparent 70%);
+  top: -20%;
+  left: -15%;
+  animation: drift-a 26s ease-in-out infinite;
+}
+
+.app-bg::after {
+  background: radial-gradient(circle, #9b5cf6, transparent 70%);
+  bottom: -25%;
+  right: -15%;
+  animation: drift-b 32s ease-in-out infinite;
+}
+
+.app-bg .app-bg-blob {
+  background: radial-gradient(circle, #34d399, transparent 70%);
+  top: 30%;
+  left: 40%;
+  opacity: 0.18;
+  animation: drift-c 40s ease-in-out infinite;
+}
+
+html.light .app-bg::before,
+html.light .app-bg::after,
+html.light .app-bg .app-bg-blob {
+  opacity: 0.22;
+}
+
+@keyframes drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(10vw, 8vh) scale(1.15); }
+}
+
+@keyframes drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-8vw, -10vh) scale(1.1); }
+}
+
+@keyframes drift-c {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-40%, -60%) scale(1.2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-bg::before,
+  .app-bg::after,
+  .app-bg .app-bg-blob {
+    animation: none;
+  }
 }
 
 ::selection {
   background: var(--color-amber);
-  color: var(--color-ink);
+  color: white;
 }
 
 .font-mono {

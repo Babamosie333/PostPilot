@@ -1,24 +1,34 @@
 import {
+  LayoutDashboard,
   PenSquare,
   FileText,
   CheckCircle2,
   Clock,
   Send,
   AlertTriangle,
+  Sparkles,
   BarChart3,
+  CalendarDays,
   Settings as SettingsIcon,
   ShieldCheck,
   Info,
+  Sun,
+  Moon,
 } from "lucide-react";
+import Logo from "./Logo";
+import { useTheme } from "../lib/ThemeContext";
 
 const NAV_ITEMS = [
+  { key: "dashboard", label: "Dashboard", hint: "Overview", icon: LayoutDashboard },
   { key: "compose", label: "Compose", hint: "New post", icon: PenSquare },
   { key: "draft", label: "Drafts", hint: "Awaiting review", icon: FileText },
   { key: "approved", label: "Approved", hint: "Ready to schedule", icon: CheckCircle2 },
   { key: "scheduled", label: "Scheduled", hint: "Queued to fire", icon: Clock },
   { key: "posted", label: "Posted", hint: "Live on LinkedIn", icon: Send },
   { key: "failed", label: "Failed", hint: "Needs attention", icon: AlertTriangle },
-  { key: "analytics", label: "Analytics", hint: "How posts perform", icon: BarChart3, divider: true },
+  { key: "assistant", label: "AI Assistant", hint: "Ask for a post", icon: Sparkles, divider: true },
+  { key: "analytics", label: "Analytics", hint: "How posts perform", icon: BarChart3 },
+  { key: "calendar", label: "Calendar", hint: "Your posting month", icon: CalendarDays },
   { key: "settings", label: "Settings", hint: "GitHub recap", icon: SettingsIcon },
   { key: "about", label: "About", hint: "Contact the creator", icon: Info },
 ];
@@ -27,10 +37,10 @@ const ADMIN_ITEM = { key: "admin", label: "Admin", hint: "Manage users", icon: S
 
 export default function Sidebar({ active, onSelect, counts, isAdmin, userEmail, onLogout, open, onClose }) {
   const items = isAdmin ? [...NAV_ITEMS, ADMIN_ITEM] : NAV_ITEMS;
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <>
-      {/* Backdrop — only rendered/visible on mobile while the drawer is open */}
       <div
         onClick={onClose}
         className={`fixed inset-0 z-30 bg-black/60 transition-opacity duration-200 md:hidden ${
@@ -45,7 +55,7 @@ export default function Sidebar({ active, onSelect, counts, isAdmin, userEmail, 
       >
         <div className="flex items-center justify-between border-b border-line px-5 py-5">
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-amber shadow-[0_0_8px_2px_rgba(242,169,59,0.55)]" />
+            <Logo size={22} />
             <span className="font-display text-[15px] font-700 tracking-tight text-paper">
               PostPilot
             </span>
@@ -105,6 +115,13 @@ export default function Sidebar({ active, onSelect, counts, isAdmin, userEmail, 
         </nav>
 
         <div className="border-t border-line px-5 py-4">
+          <button
+            onClick={toggleTheme}
+            className="focus-ring mb-3 flex w-full items-center gap-2 border border-line px-3 py-2 text-[11.5px] font-600 text-paper-dim transition-colors hover:text-paper"
+          >
+            {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+            {theme === "dark" ? "Light mode" : "Dark mode"}
+          </button>
           {userEmail && (
             <div className="mb-3 flex items-center justify-between gap-2">
               <span className="truncate font-mono text-[10.5px] text-paper-dim">{userEmail}</span>

@@ -105,6 +105,20 @@ export const api = {
     }),
   triggerRecap: () => request("/api/posts/github-recap", { method: "POST" }),
 
+  // --- AI assistant ---
+  aiChat: (message, history, tone) =>
+    request("/api/posts/ai-chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, history, tone }),
+    }),
+  saveAsDraft: (text, tone) =>
+    request("/api/posts/save-as-draft", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, tone }),
+    }),
+
   // --- admin ---
   adminListUsers: () => request("/api/admin/users"),
   adminBanUser: (id, reason) =>

@@ -1,36 +1,43 @@
 import { useCallback, useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import StatusBar from "./components/StatusBar";
+import DashboardView from "./components/DashboardView";
 import ComposeView from "./components/ComposeView";
 import PostsView from "./components/PostsView";
 import AdminView from "./components/AdminView";
+import AIAssistantView from "./components/AIAssistantView";
 import AnalyticsView from "./components/AnalyticsView";
+import CalendarView from "./components/CalendarView";
 import SettingsView from "./components/SettingsView";
 import AboutView from "./components/AboutView";
 import AuthScreen from "./components/AuthScreen";
 import BannedScreen from "./components/BannedScreen";
 import { api } from "./lib/api";
 import { AuthProvider, useAuth } from "./lib/AuthContext";
+import { ThemeProvider } from "./lib/ThemeContext";
 
 const VIEW_LABELS = {
+  dashboard: "Dashboard",
   compose: "Compose",
   draft: "Drafts",
   approved: "Approved",
   scheduled: "Scheduled",
   posted: "Posted",
   failed: "Failed",
+  assistant: "AI Assistant",
   analytics: "Analytics",
+  calendar: "Calendar",
   settings: "Settings",
   about: "About",
   admin: "Admin — users",
 };
 
 // Views that don't back onto a filtered post list.
-const NON_POST_VIEWS = ["compose", "admin", "analytics", "settings", "about"];
+const NON_POST_VIEWS = ["dashboard", "compose", "admin", "assistant", "analytics", "calendar", "settings", "about"];
 
 function Dashboard() {
   const { user, logout, loginWithLinkedIn } = useAuth();
-  const [active, setActive] = useState("compose");
+  const [active, setActive] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [linkedinStatus, setLinkedinStatus] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -81,7 +88,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="flex h-screen bg-ink">
+    <div className="flex h-screen bg-transparent">
       <Sidebar
         active={active}
         onSelect={setActive}
@@ -101,7 +108,9 @@ function Dashboard() {
         />
         <main className="flex-1 overflow-y-auto">
           <div key={active} className="animate-fade-in">
-            {active === "compose" ? (
+            {active === "dashboard" ? (
+              <DashboardView counts={counts.value} onNavigate={setActive} />
+            ) : active === "compose" ? (
               <ComposeView
                 onGenerated={() => {
                   counts.refresh();
@@ -109,8 +118,12 @@ function Dashboard() {
               />
             ) : active === "admin" ? (
               <AdminView />
+            ) : active === "assistant" ? (
+              <AIAssistantView />
             ) : active === "analytics" ? (
               <AnalyticsView />
+            ) : active === "calendar" ? (
+              <CalendarView />
             ) : active === "settings" ? (
               <SettingsView />
             ) : active === "about" ? (
@@ -162,7 +175,7 @@ function Gate() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-ink">
+      <div className="flex h-screen items-center justify-center bg-transparent">
         <span className="font-mono text-[12px] text-paper-dim">loading…</span>
       </div>
     );
@@ -181,8 +194,15 @@ function Gate() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Gate />
-    </AuthProvider>
+    <>
+      <div className="app-bg">
+        <span className="app-bg-blob" />
+      </div>
+      <ThemeProvider>
+        <AuthProvider>
+          <Gate />
+        </AuthProvider>
+      </ThemeProvider>
+    </>
   );
 }

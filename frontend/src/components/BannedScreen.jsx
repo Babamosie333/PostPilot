@@ -1,6 +1,6 @@
 export default function BannedScreen({ reason, onLogout }) {
   return (
-    <div className="flex h-screen items-center justify-center bg-ink px-4">
+    <div className="flex h-screen items-center justify-center bg-transparent px-4">
       <div className="w-full max-w-sm border border-signal-rust/40 bg-panel p-6 text-center">
         <span className="mx-auto mb-3 block h-1.5 w-1.5 rounded-full bg-signal-rust" />
         <h1 className="font-display text-[17px] font-700 text-paper">Account banned</h1>

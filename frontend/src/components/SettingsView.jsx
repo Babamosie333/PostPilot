@@ -45,7 +45,7 @@ export default function SettingsView() {
   }
 
   return (
-    <div className="mx-auto max-w-xl px-8 py-8">
+    <div className="mx-auto max-w-xl px-4 py-6 sm:px-8 sm:py-8">
       <div className="border border-line bg-panel p-5">
         <p className="font-mono text-[10.5px] uppercase tracking-wide text-paper-dim">
           Weekly GitHub recap
@@ -97,7 +97,7 @@ export default function SettingsView() {
           <button
             onClick={save}
             disabled={busy || !username}
-            className="focus-ring border border-amber bg-amber px-4 py-2 text-[12.5px] font-700 text-ink disabled:opacity-50"
+            className="focus-ring border border-amber bg-amber px-4 py-2 text-[12.5px] font-700 text-white disabled:opacity-50"
           >
             Save
           </button>

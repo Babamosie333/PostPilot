@@ -115,7 +115,7 @@ export default function ComposeView({ onGenerated }) {
                     e.stopPropagation();
                     removeFile(i);
                   }}
-                  className="focus-ring absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center bg-signal-rust text-[11px] font-700 text-ink opacity-0 transition-opacity group-hover:opacity-100"
+                  className="focus-ring absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center bg-signal-rust text-[11px] font-700 text-white opacity-0 transition-opacity group-hover:opacity-100"
                 >
                   ×
                 </button>
@@ -308,7 +308,7 @@ export default function ComposeView({ onGenerated }) {
         <button
           onClick={handleGenerate}
           disabled={busy}
-          className="focus-ring border border-amber bg-amber px-5 py-2.5 text-[13px] font-700 text-ink transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:active:scale-100"
+          className="focus-ring border border-amber bg-amber px-5 py-2.5 text-[13px] font-700 text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:active:scale-100"
         >
           {busy ? (video ? "Uploading video…" : "Generating…") : "Generate post"}
         </button>

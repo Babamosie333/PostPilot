@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../lib/AuthContext";
+import Logo from "./Logo";
 
 export default function AuthScreen() {
   const { banInfo, authError, loginWithLinkedIn, devLogin } = useAuth();
@@ -23,10 +24,10 @@ export default function AuthScreen() {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center bg-ink px-4">
+    <div className="flex h-screen items-center justify-center bg-transparent px-4">
       <div className="w-full max-w-sm text-center">
         <div className="mb-8 flex items-center justify-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-amber shadow-[0_0_8px_2px_rgba(242,169,59,0.55)]" />
+          <Logo size={26} />
           <span className="font-display text-[17px] font-700 tracking-tight text-paper">
             PostPilot
           </span>
@@ -52,7 +53,7 @@ export default function AuthScreen() {
 
           <button
             onClick={loginWithLinkedIn}
-            className="focus-ring flex w-full items-center justify-center gap-2 border border-amber bg-amber px-4 py-2.5 text-[13px] font-700 text-ink transition-opacity hover:opacity-90"
+            className="focus-ring flex w-full items-center justify-center gap-2 border border-amber bg-amber px-4 py-2.5 text-[13px] font-700 text-white transition-opacity hover:opacity-90"
           >
             Continue with LinkedIn
           </button>
