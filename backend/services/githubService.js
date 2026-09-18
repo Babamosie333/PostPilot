@@ -18,23 +18,44 @@ async function fetchCommitSummary(username, token, sinceDate) {
     (e) => e.type === "PushEvent" && new Date(e.created_at) > sinceDate
   );
 
+  console.log(
+    `GitHub recap for ${username}: ${res.data.length} recent public events, ${pushEvents.length} push events since ${sinceDate.toISOString()}`
+  );
+  console.log(
+    "Push event commit counts:",
+    pushEvents.map((e) => (e.payload?.commits || []).length)
+  );
+
   if (pushEvents.length === 0) return null;
 
   const byRepo = {};
   for (const event of pushEvents) {
     const repo = event.repo?.name || "unknown repo";
-    byRepo[repo] = byRepo[repo] || [];
+    byRepo[repo] = byRepo[repo] || { messages: [], pushCount: 0 };
+    byRepo[repo].pushCount += 1;
     for (const commit of event.payload?.commits || []) {
-      // Skip merge-commit noise
-      if (!/^merge/i.test(commit.message)) {
-        byRepo[repo].push(commit.message.split("\n")[0]);
-      }
+      if (commit?.message) byRepo[repo].messages.push(commit.message.split("\n")[0]);
     }
   }
 
-  const lines = Object.entries(byRepo)
-    .filter(([, messages]) => messages.length > 0)
-    .map(([repo, messages]) => `${repo}:\n- ${messages.slice(0, 8).join("\n- ")}`);
+  // Prefer non-merge commit messages (they're more informative), but if a
+  // repo's activity was ALL merges, keep them rather than silently
+  // dropping that repo's activity entirely — a merge-heavy workflow (PRs
+  // merged via GitHub's UI) shouldn't look identical to "no activity".
+  for (const repo of Object.keys(byRepo)) {
+    const nonMerge = byRepo[repo].messages.filter((msg) => !/^merge/i.test(msg));
+    byRepo[repo].messages = nonMerge.length > 0 ? nonMerge : byRepo[repo].messages;
+  }
+
+  const lines = Object.entries(byRepo).map(([repo, { messages, pushCount }]) => {
+    if (messages.length > 0) {
+      return `${repo}:\n- ${messages.slice(0, 8).join("\n- ")}`;
+    }
+    // GitHub's public events API doesn't always include full commit
+    // message details even for genuine recent pushes — when that happens,
+    // fall back to a plain activity count instead of reporting nothing.
+    return `${repo}:\n- ${pushCount} push${pushCount === 1 ? "" : "es"} (commit details not available from GitHub's activity feed)`;
+  });
 
   return lines.length > 0 ? lines.join("\n\n") : null;
 }
