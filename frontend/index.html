@@ -2,23 +2,66 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Replace https://post-pilot-linkedin.vercel.app with your real deployed domain everywhere below -->
+    <link rel="canonical" href="https://post-pilot-linkedin.vercel.app/" />
+
+    <!-- Favicons / app icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#05060f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PostPilot" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <title>PostPilot — control tower</title>
-    <meta name="description" content="Draft, approve, schedule, and track LinkedIn posts — screenshot to feed-ready in minutes." />
 
+    <title>PostPilot — AI-powered LinkedIn post scheduler and control tower</title>
+    <meta name="description" content="PostPilot drafts, approves, schedules, and tracks your LinkedIn posts with AI — turn a screenshot into a feed-ready post in minutes, then track what performs." />
+    <meta name="keywords" content="LinkedIn scheduler, LinkedIn automation, AI post generator, LinkedIn content calendar, social media scheduler, LinkedIn analytics, AI caption generator, LinkedIn bot" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="PostPilot" />
+
+    <!-- Open Graph (Facebook, LinkedIn, Discord, WhatsApp, etc.) -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://post-pilot-linkedin.vercel.app/" />
+    <meta property="og:site_name" content="PostPilot" />
     <meta property="og:title" content="PostPilot — your LinkedIn control tower" />
-    <meta property="og:description" content="Draft, approve, schedule, and track LinkedIn posts — screenshot to feed-ready in minutes." />
-    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:description" content="Draft, approve, schedule, and track LinkedIn posts with AI — screenshot to feed-ready in minutes." />
+    <meta property="og:image" content="https://post-pilot-linkedin.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
 
+    <!-- Twitter/X Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="PostPilot — your LinkedIn control tower" />
-    <meta name="twitter:description" content="Draft, approve, schedule, and track LinkedIn posts — screenshot to feed-ready in minutes." />
-    <meta name="twitter:image" content="/og-image.png" />
+    <meta name="twitter:description" content="Draft, approve, schedule, and track LinkedIn posts with AI — screenshot to feed-ready in minutes." />
+    <meta name="twitter:image" content="https://post-pilot-linkedin.vercel.app/og-image.png" />
+
+    <!-- Structured data — helps Google understand & richly display this in search results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "PostPilot",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "PostPilot drafts, approves, schedules, and tracks your LinkedIn posts with AI — turn a screenshot into a feed-ready post in minutes, then track what performs.",
+      "url": "https://post-pilot-linkedin.vercel.app/",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

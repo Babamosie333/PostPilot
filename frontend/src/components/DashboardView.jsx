@@ -1,6 +1,99 @@
 import { useEffect, useState } from "react";
-import { Clock, FileText, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Clock, FileText, CheckCircle2, AlertTriangle, Sparkles, Send } from "lucide-react";
 import { api } from "../lib/api";
+
+function DashboardAssistant({ onNavigate }) {
+  const [message, setMessage] = useState("");
+  const [reply, setReply] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [saved, setSaved] = useState(false);
+
+  async function handleSend() {
+    if (!message.trim() || busy) return;
+    setBusy(true);
+    setError(null);
+    setSaved(false);
+    try {
+      const { reply } = await api.aiChat(message.trim(), [], "authentic");
+      setReply(reply);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleSaveAsDraft() {
+    try {
+      await api.saveAsDraft(reply, "authentic");
+      setSaved(true);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  return (
+    <div className="mb-6 border border-line bg-panel p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <p className="flex items-center gap-1.5 font-mono text-[10.5px] uppercase tracking-wide text-paper-dim">
+          <Sparkles className="h-3.5 w-3.5" /> AI Assistant
+        </p>
+        <button
+          onClick={() => onNavigate("assistant")}
+          className="focus-ring font-mono text-[10.5px] text-amber hover:underline"
+        >
+          open full chat
+        </button>
+      </div>
+
+      <div className="flex items-end gap-2 border border-line bg-panel-raised p-2">
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          rows={1}
+          placeholder="Ask anything, or say 'write a post about...' when you want one"
+          className="focus-ring flex-1 resize-none bg-transparent px-2 py-1.5 text-[13px] text-paper placeholder:text-paper-dim/60"
+        />
+        <button
+          onClick={handleSend}
+          disabled={busy || !message.trim()}
+          className="focus-ring flex h-9 w-9 shrink-0 items-center justify-center bg-amber text-white transition-all active:scale-95 disabled:opacity-40"
+        >
+          <Send className="h-4 w-4" />
+        </button>
+      </div>
+
+      {error && (
+        <p className="mt-2 font-mono text-[11px] text-signal-rust">{error}</p>
+      )}
+
+      {reply && (
+        <div className="mt-3 border border-line bg-panel-raised p-3">
+          <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-paper">{reply}</p>
+          <div className="mt-2 border-t border-line pt-2">
+            {saved ? (
+              <span className="font-mono text-[10.5px] text-signal-green">Saved to Drafts</span>
+            ) : (
+              <button
+                onClick={handleSaveAsDraft}
+                className="focus-ring font-mono text-[10.5px] text-amber hover:underline"
+              >
+                Save as draft
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function DashboardView({ counts, onNavigate }) {
   const [summary, setSummary] = useState(null);
@@ -23,6 +116,8 @@ export default function DashboardView({ counts, onNavigate }) {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:px-8 sm:py-8">
+      <DashboardAssistant onNavigate={onNavigate} />
+
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <QueueStat icon={FileText} label="Drafts" value={counts?.draft ?? 0} onClick={() => onNavigate("draft")} />
         <QueueStat icon={CheckCircle2} label="Approved" value={counts?.approved ?? 0} onClick={() => onNavigate("approved")} />

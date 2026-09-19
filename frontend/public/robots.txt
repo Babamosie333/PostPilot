@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://post-pilot-linkedin.vercel.app/sitemap.xml

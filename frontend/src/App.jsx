@@ -12,6 +12,7 @@ import SettingsView from "./components/SettingsView";
 import AboutView from "./components/AboutView";
 import AuthScreen from "./components/AuthScreen";
 import BannedScreen from "./components/BannedScreen";
+import SplashScreen from "./components/SplashScreen";
 import { api } from "./lib/api";
 import { AuthProvider, useAuth } from "./lib/AuthContext";
 import { ThemeProvider } from "./lib/ThemeContext";
@@ -174,11 +175,7 @@ function Gate() {
   const { user, loading, banInfo, logout } = useAuth();
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-transparent">
-        <span className="font-mono text-[12px] text-paper-dim">loading…</span>
-      </div>
-    );
+    return <div className="h-screen bg-transparent" />;
   }
 
   if (banInfo) {
@@ -192,6 +189,18 @@ function Gate() {
   return <Dashboard />;
 }
 
+function AppShell() {
+  const { loading } = useAuth();
+  const [splashDone, setSplashDone] = useState(false);
+
+  return (
+    <>
+      <Gate />
+      {!splashDone && <SplashScreen ready={!loading} onDone={() => setSplashDone(true)} />}
+    </>
+  );
+}
+
 export default function App() {
   return (
     <>
@@ -200,7 +209,7 @@ export default function App() {
       </div>
       <ThemeProvider>
         <AuthProvider>
-          <Gate />
+          <AppShell />
         </AuthProvider>
       </ThemeProvider>
     </>
