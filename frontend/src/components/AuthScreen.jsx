@@ -28,9 +28,9 @@ export default function AuthScreen() {
       <div className="w-full max-w-sm text-center">
         <div className="mb-8 flex items-center justify-center gap-2">
           <Logo size={26} />
-          <span className="font-display text-[17px] font-700 tracking-tight text-paper">
+          <h1 className="font-display text-[17px] font-700 tracking-tight text-paper">
             PostPilot
-          </span>
+          </h1>
         </div>
 
         <div className="border border-line bg-panel p-6">
